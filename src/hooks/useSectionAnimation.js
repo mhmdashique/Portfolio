@@ -1,0 +1,15 @@
+import { useInView } from 'framer-motion';
+import { useRef } from 'react';
+
+/**
+ * Reusable hook for detection when a section enters the viewport.
+ */
+export const useSectionAnimation = (threshold = 0.15) => {
+  const ref = useRef(null);
+  const inView = useInView(ref, { 
+    once: true, 
+    amount: threshold 
+  });
+
+  return { ref, inView };
+};
