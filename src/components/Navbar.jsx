@@ -16,13 +16,10 @@ const Navbar = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { scrollY } = useScroll();
   
-  const width = "100%";
-  const top = "0px";
-  const borderRadius = "0px";
   const backgroundColor = useTransform(
     scrollY,
     [0, 100],
-    ["rgba(10, 15, 30, 0)", "rgba(10, 15, 30, 0.7)"]
+    ["rgba(10, 15, 30, 0)", "rgba(10, 15, 30, 0.85)"]
   );
   const borderColor = useTransform(
     scrollY,
@@ -30,39 +27,67 @@ const Navbar = () => {
     ["rgba(255, 255, 255, 0)", "rgba(255, 255, 255, 0.1)"]
   );
 
-  const handleLinkClick = (name) => {
-    setActiveLink(name);
+  // Scroll spy: detect active section
+  useEffect(() => {
+    const sectionIds = ['home', 'about', 'skills', 'experience', 'projects', 'contact'];
+    
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.id;
+            const link = navLinks.find(l => l.href === `#${id}`);
+            if (link) setActiveLink(link.name);
+          }
+        });
+      },
+      { threshold: 0.3, rootMargin: '-80px 0px 0px 0px' }
+    );
+
+    sectionIds.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleLinkClick = (e, link) => {
+    e.preventDefault();
+    setActiveLink(link.name);
     setMobileMenuOpen(false);
+    const target = document.querySelector(link.href);
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   };
 
   return (
-    <div className="fixed top-0 left-0 w-full flex justify-center z-[100] transition-all duration-300 pointer-events-none">
+    <div className="fixed top-0 left-0 w-full flex justify-center z-[100] pointer-events-none">
       <motion.nav
         style={{ 
-          width, 
-          top, 
-          borderRadius, 
           backgroundColor, 
           borderColor,
-          borderWidth: scrollY.get() > 50 ? '1px' : '0px'
         }}
-        className="backdrop-blur-xl h-20 flex items-center justify-between px-8 md:px-12 pointer-events-auto shadow-2xl"
+        className="w-full backdrop-blur-xl h-20 flex items-center justify-between px-8 md:px-12 pointer-events-auto border-b"
       >
-        <motion.div 
-          className="text-2xl font-black font-syne text-accent tracking-tighter"
+        <motion.a 
+          href="#home"
+          onClick={(e) => handleLinkClick(e, navLinks[0])}
+          className="text-2xl font-black font-syne text-accent tracking-tighter cursor-pointer"
           whileHover={{ scale: 1.05 }}
         >
           MA<span className="text-secondary">.</span>
-        </motion.div>
+        </motion.a>
 
-        {/* Desktop Links - Minimal Centered Pill Style */}
+        {/* Desktop Links */}
         <div className="hidden md:flex items-center bg-white/5 px-6 py-2 rounded-full border border-white/5 gap-8">
           {navLinks.map((link) => (
             <motion.a
               key={link.name}
               href={link.href}
-              onClick={() => handleLinkClick(link.name)}
-              className={`relative font-syne font-bold text-xs uppercase tracking-[0.2em] transition-colors py-1 ${
+              onClick={(e) => handleLinkClick(e, link)}
+              className={`relative font-syne font-bold text-xs uppercase tracking-[0.2em] transition-colors py-1 cursor-pointer ${
                 activeLink === link.name ? 'text-accent' : 'text-gray-400 hover:text-white'
               }`}
             >
@@ -80,9 +105,10 @@ const Navbar = () => {
         <div className="flex items-center gap-6">
           <motion.a
             href="#contact"
+            onClick={(e) => handleLinkClick(e, navLinks[5])}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="hidden md:block px-6 py-2.5 bg-accent text-background font-syne font-black text-xs uppercase tracking-widest rounded-full shadow-lg shadow-accent/20"
+            className="hidden md:block px-6 py-2.5 bg-accent text-background font-syne font-black text-xs uppercase tracking-widest rounded-full shadow-lg shadow-accent/20 cursor-pointer"
           >
             Hire Me
           </motion.a>
@@ -107,13 +133,14 @@ const Navbar = () => {
               exit={{ opacity: 0, scale: 0.95, y: -20 }}
               className="absolute top-24 left-0 w-full px-6 md:hidden pointer-events-none"
             >
-              <div className="glass-dark rounded-3xl p-8 border border-white/10 flex flex-col items-center gap-6 pointer-events-auto">
+              <div className="bg-[#0d1326]/95 backdrop-blur-2xl rounded-3xl p-8 border border-white/10 flex flex-col items-center gap-6 pointer-events-auto shadow-2xl">
                 {navLinks.map((link) => (
                   <motion.a
                     key={link.name}
                     href={link.href}
-                    onClick={() => handleLinkClick(link.name)}
-                    className={`text-2xl font-syne font-black ${activeLink === link.name ? 'text-accent' : 'text-white'}`}
+                    onClick={(e) => handleLinkClick(e, link)}
+                    whileHover={{ x: 5 }}
+                    className={`text-xl font-syne font-black ${activeLink === link.name ? 'text-accent' : 'text-white'}`}
                   >
                     {link.name}
                   </motion.a>

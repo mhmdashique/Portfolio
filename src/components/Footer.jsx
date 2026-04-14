@@ -1,15 +1,15 @@
 import { motion } from 'framer-motion';
 import { useSectionAnimation } from '../hooks/useSectionAnimation';
-import { FiGithub, FiLinkedin, FiTwitter, FiInstagram, FiArrowUp } from 'react-icons/fi';
+import { FiGithub, FiLinkedin, FiMail, FiInstagram, FiArrowUp } from 'react-icons/fi';
 
 const Footer = () => {
     const { ref, inView } = useSectionAnimation(0.1);
 
     const socialLinks = [
-        { icon: <FiGithub />, href: "https://github.com/mohammedashiqueofficial7", name: "GitHub" },
+        { icon: <FiGithub />, href: "https://github.com/mhmdashique", name: "GitHub" },
         { icon: <FiLinkedin />, href: "https://linkedin.com/in/mohammed-ashique-s-13613b339", name: "LinkedIn" },
-        { icon: <FiTwitter />, href: "#", name: "Twitter" },
-        { icon: <FiInstagram />, href: "#", name: "Instagram" },
+        { icon: <FiMail />, href: "mailto:ashiqueoffl7@gmail.com", label: "Email" },
+        { icon: <FiInstagram />, href: "https://www.instagram.com/aashiq_mhm.d/", name: "Instagram" },
     ];
 
     const scrollToTop = () => {

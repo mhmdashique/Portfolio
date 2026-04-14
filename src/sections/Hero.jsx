@@ -13,9 +13,9 @@ const Hero = () => {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   const socials = [
-    { icon: <FiGithub />, href: "https://github.com/mohammedashiqueofficial7", label: "GitHub" },
+    { icon: <FiGithub />, href: "https://github.com/mhmdashique", label: "GitHub" },
     { icon: <FiLinkedin />, href: "https://linkedin.com/in/mohammed-ashique-s-13613b339", label: "LinkedIn" },
-    { icon: <FiInstagram />, href: "#", label: "Instagram" },
+    { icon: <FiInstagram />, href: "https://www.instagram.com/aashiq_mhm.d/", label: "Instagram" },
     { icon: <FiMail />, href: "mailto:ashiqueoffl7@gmail.com", label: "Email" }
   ];
 
@@ -25,10 +25,82 @@ const Hero = () => {
       ref={containerRef}
       className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#0a0f1e]"
     >
-      {/* Background Ambience */}
+      {/* Animated Background */}
       <div className="absolute inset-0 z-0 overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-accent/15 rounded-full blur-[120px] animate-pulse" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[400px] h-[400px] bg-secondary/15 rounded-full blur-[120px]" />
+        {/* Gradient Orbs */}
+        <motion.div 
+          animate={{ 
+            x: [0, 80, -40, 0],
+            y: [0, -60, 40, 0],
+            scale: [1, 1.3, 0.9, 1]
+          }}
+          transition={{ duration: 18, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[20%] left-[15%] w-[500px] h-[500px] bg-accent/10 rounded-full blur-[120px]"
+        />
+        <motion.div 
+          animate={{ 
+            x: [0, -60, 30, 0],
+            y: [0, 50, -80, 0],
+            scale: [1, 0.8, 1.2, 1]
+          }}
+          transition={{ duration: 22, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute bottom-[10%] right-[10%] w-[400px] h-[400px] bg-secondary/10 rounded-full blur-[120px]"
+        />
+        <motion.div 
+          animate={{ 
+            x: [0, 40, -60, 0],
+            y: [0, -40, 20, 0],
+          }}
+          transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          className="absolute top-[60%] left-[50%] w-[300px] h-[300px] bg-accent/5 rounded-full blur-[100px]"
+        />
+
+        {/* Floating Geometric Particles */}
+        {[...Array(6)].map((_, i) => (
+          <motion.div
+            key={i}
+            animate={{
+              y: [0, -30 - i * 10, 0],
+              x: [0, (i % 2 === 0 ? 15 : -15), 0],
+              rotate: [0, 180, 360],
+              opacity: [0.15, 0.3, 0.15]
+            }}
+            transition={{
+              duration: 8 + i * 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+              delay: i * 0.8
+            }}
+            className="absolute"
+            style={{
+              top: `${15 + i * 14}%`,
+              left: `${8 + i * 16}%`,
+            }}
+          >
+            <div 
+              className={`${i % 3 === 0 ? 'w-3 h-3 rounded-full' : i % 3 === 1 ? 'w-4 h-4 rotate-45' : 'w-2 h-6 rounded-full'} border ${i % 2 === 0 ? 'border-accent/20' : 'border-secondary/20'}`}
+            />
+          </motion.div>
+        ))}
+
+        {/* Orbiting Ring */}
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 40, repeat: Infinity, ease: "linear" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] border border-white/[0.02] rounded-full"
+        >
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2 h-2 bg-accent/30 rounded-full" />
+          <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-secondary/30 rounded-full" />
+        </motion.div>
+        <motion.div
+          animate={{ rotate: -360 }}
+          transition={{ duration: 50, repeat: Infinity, ease: "linear" }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] border border-white/[0.015] rounded-full"
+        >
+          <div className="absolute top-1/2 right-0 translate-y-[-50%] w-1.5 h-1.5 bg-accent/20 rounded-full" />
+        </motion.div>
+
+        {/* Dot Grid */}
         <div className="absolute inset-0 z-0 opacity-[0.03]" 
              style={{ backgroundImage: 'radial-gradient(#ffffff 0.5px, transparent 0.5px)', backgroundSize: '24px 24px' }} />
       </div>
@@ -83,8 +155,8 @@ const Hero = () => {
           <a href="#projects" className="group flex items-center gap-2 px-8 py-3.5 bg-accent text-background font-syne font-black text-xs uppercase tracking-widest rounded-xl shadow-xl shadow-accent/20 hover:scale-105 transition-all">
             View Projects <FiArrowRight className="group-hover:translate-x-1 transition-transform" />
           </a>
-          <a href="/resume.pdf" className="flex items-center gap-2 px-8 py-3.5 border border-white/10 text-white font-syne font-black text-sm uppercase tracking-widest rounded-xl hover:bg-white/5 transition-all">
-            <FiDownload /> Resume
+          <a href="/Mohammed_Ashique_S Resume Latest.pdf" target="_blank" className="flex items-center gap-2 px-8 py-3.5 border border-white/10 text-white font-syne font-black text-sm uppercase tracking-widest rounded-xl hover:bg-white/5 transition-all">
+            <FiDownload /> Preview CV
           </a>
         </motion.div>
 

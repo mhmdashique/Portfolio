@@ -10,31 +10,55 @@ const fallbackProjects = [
     id: 1,
     title: "Blog Management Website",
     category: "Full Stack",
-    description: "Developed a full-featured Blog platform with user authentication, blog management, and integrated AI-powered chat assistance.",
+    description: "A feature-rich blogging platform with secure user authentication, a rich-text content editor, and an integrated AI-powered chat assistant for enhanced user engagement.",
     tech: ["React.js", "Node.js", "MongoDB", "OpenAI API"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    image: "https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1770&auto=format&fit=crop"
+    github: "http://github.com/mhmdashique/BlogProject",
+    image: "https://images.unsplash.com/photo-1432821596592-e2c18b78144f?q=80&w=1770&auto=format&fit=crop"
   },
   {
     id: 2,
     title: "E-Commerce Website",
     category: "MERN Stack",
-    description: "Developed a full-featured online shopping platform with user authentication and product management using MERN stack.",
+    description: "A complete online shopping solution featuring product catalog management, secure payment gateway integration, shopping cart functionality, and an admin dashboard for order tracking.",
     tech: ["MongoDB", "Express", "React", "Node.js"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    image: "https://images.unsplash.com/photo-1557821552-17105176677c?q=80&w=1932&auto=format&fit=crop"
+    github: "https://github.com/mhmdashique/Ecommerce-model",
+    image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=1770&auto=format&fit=crop"
   },
   {
     id: 3,
     title: "Simple Blog Website",
     category: "Frontend",
-    description: "Designed and implemented a blog management system for posting and managing content, focusing on user experience.",
+    description: "A clean, minimalist blog application with local storage persistence, category-based filtering, and a responsive reading experience optimized for all devices.",
     tech: ["React.js", "Tailwind CSS", "Local Storage"],
-    github: "https://github.com",
-    demo: "https://example.com",
-    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?q=80&w=1772&auto=format&fit=crop"
+    github: "https://github.com/mhmdashique/Blog-Website",
+    image: "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?q=80&w=1773&auto=format&fit=crop"
+  },
+  {
+    id: 4,
+    title: "Charity Website",
+    category: "Frontend",
+    description: "A visually compelling nonprofit website designed to drive donations and volunteer engagement, featuring campaign showcases, impact statistics, and a streamlined donation flow.",
+    tech: ["React.js", "Tailwind CSS", "Framer Motion"],
+    github: "https://github.com/mhmdashique/charity-website",
+    image: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?q=80&w=1770&auto=format&fit=crop"
+  },
+  {
+    id: 5,
+    title: "Website For a Shop",
+    category: "Fullstack",
+    description: "A modern storefront web application with product listings, inventory management, customer reviews, and a seamless checkout experience for small business owners.",
+    tech: ["React.js", "Node.js", "MongoDB", "Express"],
+    github: "https://github.com/mhmdashique/charity-website",
+    image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?q=80&w=1770&auto=format&fit=crop"
+  },
+  {
+    id: 6,
+    title: "Portfolio",
+    category: "Fullstack",
+    description: "A high-performance personal portfolio built with scroll-triggered animations, dynamic theming, and a modular component architecture to showcase projects and skills.",
+    tech: ["React.js", "Tailwind CSS", "Framer Motion"],
+    github: "https://github.com/mhmdashique/Portfolio",
+    image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=1715&auto=format&fit=crop"
   }
 ];
 
@@ -150,15 +174,17 @@ const Projects = () => {
                   >
                     <FiGithub size={20} />
                   </motion.a>
-                  <motion.a
-                    href={project.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    whileHover={{ scale: 1.1 }}
-                    className="p-2 bg-background/80 backdrop-blur-md rounded-full text-white hover:text-accent transition-colors"
-                  >
-                    <FiExternalLink size={20} />
-                  </motion.a>
+                  {project.demo && (
+                    <motion.a
+                      href={project.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      whileHover={{ scale: 1.1 }}
+                      className="p-2 bg-background/80 backdrop-blur-md rounded-full text-white hover:text-accent transition-colors"
+                    >
+                      <FiExternalLink size={20} />
+                    </motion.a>
+                  )}
                 </div>
               </div>
 
