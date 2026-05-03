@@ -2,8 +2,8 @@ import { motion } from 'framer-motion';
 import { useSectionAnimation } from '../hooks/useSectionAnimation';
 import { 
   SiReact, SiNodedotjs, SiExpress, SiMongodb, SiJavascript, 
-  SiTailwindcss, SiRedux, SiGit, SiAxios, SiPostman, SiVite,
-  SiFigma, SiNextdotjs, SiTypescript 
+  SiTailwindcss, SiGit, SiAxios, SiPostman, SiVite,
+  SiFigma, SiNextdotjs, SiTypescript, SiPostgresql, SiSupabase
 } from 'react-icons/si';
 import { FaHtml5, FaCss3Alt, FaFileWord, FaFileExcel, FaFilePowerpoint } from 'react-icons/fa';
 
@@ -18,7 +18,6 @@ const skillCategories = [
       { name: "Tailwind CSS", icon: <SiTailwindcss /> },
       { name: "HTML5", icon: <FaHtml5 /> },
       { name: "CSS3", icon: <FaCss3Alt /> },
-      { name: "Redux", icon: <SiRedux /> },
       { name: "Vite", icon: <SiVite /> },
     ]
   },
@@ -28,6 +27,8 @@ const skillCategories = [
       { name: "Node.js", icon: <SiNodedotjs /> },
       { name: "Express.js", icon: <SiExpress /> },
       { name: "MongoDB", icon: <SiMongodb /> },
+      { name: "PostgreSQL", icon: <SiPostgresql /> },
+      { name: "Supabase", icon: <SiSupabase /> },
       { name: "Axios", icon: <SiAxios /> },
       { name: "REST APIs", icon: <SiPostman /> },
     ]
@@ -37,7 +38,6 @@ const skillCategories = [
     skills: [
       { name: "Git", icon: <SiGit /> },
       { name: "Figma", icon: <SiFigma /> },
-      { name: "MS Office Suite", icon: <div className="flex gap-1"><FaFileWord /><FaFileExcel /><FaFilePowerpoint /></div> },
       { name: "MS Word", icon: <FaFileWord /> },
       { name: "MS Excel", icon: <FaFileExcel /> },
       { name: "MS PowerPoint", icon: <FaFilePowerpoint /> },

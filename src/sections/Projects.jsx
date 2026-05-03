@@ -28,10 +28,10 @@ const fallbackProjects = [
     id: 3,
     title: "website for a water delivery service",
     category: "Full stack",
-    description: "A full-stack water delivery platform with real-time order tracking, subscription plans, delivery scheduling, and an admin dashboard for managing customers and delivery routes.",
+    description: "A clean, minimalist blog application with local storage persistence, category-based filtering, and a responsive reading experience optimized for all devices.",
     tech: ["Next.js", "Tailwind CSS", "Local Storage"],
     github: "https://github.com/mhmdashique/waterdelivery",
-    image: "https://images.unsplash.com/photo-1548839140-29a749e1cf4d?q=80&w=1776&auto=format&fit=crop"
+    image: "https://images.unsplash.com/photo-1471107340929-a87cd0f5b5f3?q=80&w=1773&auto=format&fit=crop"
   },
   {
     id: 4,
@@ -215,7 +215,6 @@ const Projects = () => {
                    <motion.button
                       className="relative text-accent font-syne text-sm font-bold flex items-center gap-2 group/btn"
                    >
-                      Case Study
                       <motion.div 
                         className="absolute -bottom-1 left-0 w-0 h-[2px] bg-accent"
                         whileHover={{ width: '100%' }}
