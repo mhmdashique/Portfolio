@@ -45,38 +45,12 @@ app.use((err, req, res, next) => {
   });
 });
 
-// Handle unhandled rejections
-process.on("unhandledRejection", (reason, promise) => {
-  console.error("❌ Unhandled Rejection at:", promise, "reason:", reason);
-});
+// Connect to database
+connectDB();
 
-process.on("uncaughtException", (error) => {
-  console.error("❌ Uncaught Exception:", error);
-});
-
-// Define and start server
+// Start server
 const PORT = process.env.PORT || 5000;
 
-const startServer = async () => {
-  // Connect to database (non-blocking)
-  connectDB().catch((err) => {
-    console.error("Database connection warning:", err.message);
-  });
-
-  // Start server
-  const server = app.listen(PORT, "0.0.0.0", () => {
-    console.log(
-      `🚀 Server running on port ${PORT} (${process.env.NODE_ENV || "development"} mode)`,
-    );
-  });
-
-  // Handle server errors
-  server.on("error", (err) => {
-    console.error("❌ Server error:", err);
-  });
-};
-
-startServer().catch((err) => {
-  console.error("❌ Failed to start server:", err);
-  process.exit(1);
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Running on ${PORT}`);
 });
