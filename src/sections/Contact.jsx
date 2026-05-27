@@ -33,13 +33,24 @@ const Contact = () => {
       const baseUrl =
         import.meta.env.VITE_API_URL || "http://localhost:5000/api";
       const apiUri = `${baseUrl}/contact`;
-      await axios.post(apiUri, formData);
+      console.log("📤 Sending to:", apiUri);
+      const response = await axios.post(apiUri, formData);
+      console.log("✅ Response:", response.data);
       setSubmittedName(formData.name);
       setStatus("sent");
       toast.success("Message sent successfully!");
       setFormData({ name: "", email: "", subject: "", message: "" });
-    } catch {
-      toast.error("Failed to send. Please try again.");
+    } catch (error) {
+      console.error("❌ Error details:", {
+        message: error.message,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        data: error.response?.data,
+        url: error.config?.url,
+      });
+      toast.error(
+        error.response?.data?.error || "Failed to send. Please try again.",
+      );
       setStatus("idle");
     }
   };
