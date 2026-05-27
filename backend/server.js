@@ -7,9 +7,6 @@ import contactRoutes from './routes/contact.js';
 // Load environment variables
 dotenv.config();
 
-// Connect to MongoDB
-connectDB();
-
 const app = express();
 
 // Middlewares
@@ -45,6 +42,20 @@ app.use((err, req, res, next) => {
 
 // Define and start server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, '0.0.0.0', () => {
-  console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
-});
+
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`🚀 Server running in ${process.env.NODE_ENV || 'development'} mode on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error(`❌ Failed to start server: ${error.message}`);
+    // Start server anyway so Render can detect it
+    app.listen(PORT, '0.0.0.0', () => {
+      console.log(`⚠️  Server running on port ${PORT} (database connection failed)`);
+    });
+  }
+};
+
+startServer();
