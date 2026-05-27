@@ -1,15 +1,26 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
-import { useSectionAnimation } from '../hooks/useSectionAnimation';
-import { FiSend, FiCheck, FiLoader, FiMail, FiMessageCircle } from 'react-icons/fi';
-import axios from 'axios';
-import toast from 'react-hot-toast';
+import { useState } from "react";
+import { motion } from "framer-motion";
+import { useSectionAnimation } from "../hooks/useSectionAnimation";
+import {
+  FiSend,
+  FiCheck,
+  FiLoader,
+  FiMail,
+  FiMessageCircle,
+} from "react-icons/fi";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 const Contact = () => {
   const { ref, inView } = useSectionAnimation(0.1);
-  const [formData, setFormData] = useState({ name: '', email: '', subject: '', message: '' });
-  const [status, setStatus] = useState('idle');
-  const [submittedName, setSubmittedName] = useState('');
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    subject: "",
+    message: "",
+  });
+  const [status, setStatus] = useState("idle");
+  const [submittedName, setSubmittedName] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,24 +28,30 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setStatus('sending');
+    setStatus("sending");
     try {
-      const apiUri = import.meta.env.VITE_API_URL || 'http://localhost:5000/api/contact';
+      const baseUrl =
+        import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+      const apiUri = `${baseUrl}/contact`;
       await axios.post(apiUri, formData);
       setSubmittedName(formData.name);
-      setStatus('sent');
+      setStatus("sent");
       toast.success("Message sent successfully!");
-      setFormData({ name: '', email: '', subject: '', message: '' });
+      setFormData({ name: "", email: "", subject: "", message: "" });
     } catch {
-      toast.error('Failed to send. Please try again.');
-      setStatus('idle');
+      toast.error("Failed to send. Please try again.");
+      setStatus("idle");
     }
   };
 
-  const inputClass = "w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 text-sm text-white font-dmSans placeholder-gray-600 focus:outline-none focus:border-accent focus:bg-white/[0.05] transition-all duration-300";
+  const inputClass =
+    "w-full bg-white/[0.03] border border-white/10 rounded-2xl px-5 py-4 text-sm text-white font-dmSans placeholder-gray-600 focus:outline-none focus:border-accent focus:bg-white/[0.05] transition-all duration-300";
 
   return (
-    <section id="contact" className="py-20 bg-[#080c1a] relative overflow-hidden px-4">
+    <section
+      id="contact"
+      className="py-20 bg-[#080c1a] relative overflow-hidden px-4"
+    >
       {/* Decorative Elements */}
       <div className="absolute top-20 left-20 w-72 h-72 bg-accent/[0.03] rounded-full blur-[100px]" />
       <div className="absolute bottom-20 right-20 w-96 h-96 bg-secondary/[0.03] rounded-full blur-[120px]" />
@@ -58,11 +75,12 @@ const Contact = () => {
             Say Hello<span className="text-accent">.</span>
           </h2>
           <p className="text-gray-500 text-sm font-dmSans max-w-md mx-auto">
-            Have a project idea, a question, or just want to connect? Fill out the form below and I'll get back to you within 24 hours.
+            Have a project idea, a question, or just want to connect? Fill out
+            the form below and I'll get back to you within 24 hours.
           </p>
         </motion.div>
 
-        {status === 'sent' ? (
+        {status === "sent" ? (
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -83,17 +101,19 @@ const Contact = () => {
             </motion.div>
 
             <h3 className="text-2xl md:text-3xl font-black font-syne tracking-tight mb-4 text-white">
-              Thank you, <span className="text-accent">{submittedName || 'there'}</span>!
+              Thank you,{" "}
+              <span className="text-accent">{submittedName || "there"}</span>!
             </h3>
-            
+
             <p className="text-gray-400 font-dmSans text-sm md:text-base max-w-md mx-auto leading-relaxed mb-8">
-              Your message has been safely received. I appreciate you taking the time to connect, and I will get back to you within 24 hours.
+              Your message has been safely received. I appreciate you taking the
+              time to connect, and I will get back to you within 24 hours.
             </p>
 
             <motion.button
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
-              onClick={() => setStatus('idle')}
+              onClick={() => setStatus("idle")}
               className="px-8 py-4 bg-gradient-to-r from-accent to-accent/80 text-background font-syne font-black text-xs uppercase tracking-[0.25em] rounded-2xl inline-flex items-center gap-2 hover:shadow-2xl hover:shadow-accent/20 transition-all duration-300 cursor-pointer"
             >
               Send Another Message
@@ -184,12 +204,24 @@ const Contact = () => {
             >
               <button
                 type="submit"
-                disabled={status !== 'idle'}
+                disabled={status !== "idle"}
                 className="w-full py-5 bg-gradient-to-r from-accent to-accent/80 text-background font-syne font-black text-xs uppercase tracking-[0.25em] rounded-2xl flex items-center justify-center gap-3 hover:shadow-2xl hover:shadow-accent/20 hover:scale-[1.01] active:scale-[0.99] transition-all duration-300 disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                {status === 'idle' && <><FiSend /> Send Message</>}
-                {status === 'sending' && <><FiLoader className="animate-spin" /> Sending...</>}
-                {status === 'sent' && <><FiCheck /> Message Sent!</>}
+                {status === "idle" && (
+                  <>
+                    <FiSend /> Send Message
+                  </>
+                )}
+                {status === "sending" && (
+                  <>
+                    <FiLoader className="animate-spin" /> Sending...
+                  </>
+                )}
+                {status === "sent" && (
+                  <>
+                    <FiCheck /> Message Sent!
+                  </>
+                )}
               </button>
             </motion.div>
           </motion.form>
@@ -205,12 +237,22 @@ const Contact = () => {
           <div className="flex items-center gap-2">
             <FiMail className="text-accent/50" />
             <span>Email: </span>
-            <a href="mailto:ashiqueoffl7@gmail.com" className="text-accent hover:underline font-bold">ashiqueoffl7@gmail.com</a>
+            <a
+              href="mailto:ashiqueoffl7@gmail.com"
+              className="text-accent hover:underline font-bold"
+            >
+              ashiqueoffl7@gmail.com
+            </a>
           </div>
           <div className="flex items-center gap-2">
             <span className="text-accent/50">📞</span>
             <span>Phone: </span>
-            <a href="tel:+917902857903" className="text-accent hover:underline font-bold">+91 7902 857 903</a>
+            <a
+              href="tel:+917902857903"
+              className="text-accent hover:underline font-bold"
+            >
+              +91 7902 857 903
+            </a>
           </div>
         </motion.div>
       </div>
