@@ -21,12 +21,10 @@ app.use(express.json());
 
 // Base Check Route
 app.get("/health", (req, res) => {
-  res
-    .status(200)
-    .json({
-      status: "OK",
-      message: "Portfolio Backend API is running smoothly!",
-    });
+  res.status(200).json({
+    status: "OK",
+    message: "Portfolio Backend API is running smoothly!",
+  });
 });
 
 // API Routes
@@ -47,26 +45,38 @@ app.use((err, req, res, next) => {
   });
 });
 
+// Handle unhandled rejections
+process.on("unhandledRejection", (reason, promise) => {
+  console.error("❌ Unhandled Rejection at:", promise, "reason:", reason);
+});
+
+process.on("uncaughtException", (error) => {
+  console.error("❌ Uncaught Exception:", error);
+});
+
 // Define and start server
 const PORT = process.env.PORT || 5000;
 
 const startServer = async () => {
-  try {
-    await connectDB();
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(
-        `🚀 Server running in ${process.env.NODE_ENV || "development"} mode on port ${PORT}`,
-      );
-    });
-  } catch (error) {
-    console.error(`❌ Failed to start server: ${error.message}`);
-    // Start server anyway so Render can detect it
-    app.listen(PORT, "0.0.0.0", () => {
-      console.log(
-        `⚠️  Server running on port ${PORT} (database connection failed)`,
-      );
-    });
-  }
+  // Connect to database (non-blocking)
+  connectDB().catch((err) => {
+    console.error("Database connection warning:", err.message);
+  });
+
+  // Start server
+  const server = app.listen(PORT, "0.0.0.0", () => {
+    console.log(
+      `🚀 Server running on port ${PORT} (${process.env.NODE_ENV || "development"} mode)`,
+    );
+  });
+
+  // Handle server errors
+  server.on("error", (err) => {
+    console.error("❌ Server error:", err);
+  });
 };
 
-startServer();
+startServer().catch((err) => {
+  console.error("❌ Failed to start server:", err);
+  process.exit(1);
+});
