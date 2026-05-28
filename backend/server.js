@@ -27,6 +27,15 @@ app.get("/health", (req, res) => {
   });
 });
 
+// Time endpoint (root level for direct access)
+app.get("/tym", (req, res) => {
+  res.json({
+    success: true,
+    time: new Date().toISOString(),
+    timestamp: Date.now(),
+  });
+});
+
 // API Routes
 app.use("/api", contactRoutes);
 
