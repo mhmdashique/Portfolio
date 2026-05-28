@@ -31,7 +31,7 @@ const Contact = () => {
     setStatus("sending");
     try {
       const baseUrl =
-        import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+        import.meta.env.VITE_API_URL || "http://localhost:3000/api";
       const apiUri = `${baseUrl}/contact`;
       console.log("📤 Sending to:", apiUri);
       const response = await axios.post(apiUri, formData);
