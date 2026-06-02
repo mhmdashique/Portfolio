@@ -19,6 +19,14 @@ app.use(
 );
 app.use(express.json());
 
+// Root Check Route
+app.get("/", (req, res) => {
+  res.status(200).json({
+    status: "OK",
+    message: "Welcome to the Portfolio Backend API!",
+  });
+});
+
 // Base Check Route
 app.get("/health", (req, res) => {
   res.status(200).json({
