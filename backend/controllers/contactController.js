@@ -1,5 +1,5 @@
 import Contact from '../models/Contact.js';
-import nodemailer from 'nodemailer';
+import { Resend } from 'resend';
 
 export const handleContactSubmit = async (req, res) => {
   const { name, email, subject, message } = req.body;
@@ -16,30 +16,27 @@ export const handleContactSubmit = async (req, res) => {
 
     console.log(`📝 Contact entry saved to MongoDB: ID ${savedContact._id}`);
 
-    // 3. Nodemailer email notification
-    let emailSent = false;
-    let emailWarning = null;
+    // 3. Return response IMMEDIATELY so the user doesn't have to wait for emails to send
+    res.status(201).json({
+      success: true,
+      message: 'Message stored and submitted successfully!',
+      data: savedContact,
+    });
 
-    const hasCredentials =
-      process.env.EMAIL_USER &&
-      process.env.EMAIL_PASS &&
-      process.env.EMAIL_USER !== 'your_email@gmail.com' &&
-      process.env.EMAIL_PASS !== 'your_app_password';
+    // 4. Resend email notification (Runs in the background)
+    const hasCredentials = process.env.RESEND_API_KEY;
 
     if (hasCredentials) {
       try {
-        const transporter = nodemailer.createTransport({
-          service: process.env.EMAIL_SERVICE || 'gmail',
-          auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS,
-          },
-        });
+        const resend = new Resend(process.env.RESEND_API_KEY);
+        const myEmail = process.env.RECEIVER_EMAIL || process.env.EMAIL_USER;
 
         // -- EMAIL 1: DEVELOPER NOTIFICATION --
+        // Note: Unless you have verified a custom domain on Resend, you MUST use 'onboarding@resend.dev' 
+        // as the 'from' address, and you can only send 'to' the email you signed up with.
         const mailOptions = {
-          from: `"Portfolio Portal" <${process.env.EMAIL_USER}>`,
-          to: process.env.RECEIVER_EMAIL || process.env.EMAIL_USER,
+          from: 'Portfolio Portal <onboarding@resend.dev>',
+          to: myEmail,
           replyTo: email,
           subject: `💼 New Lead: ${subject}`,
           text: `You have received a new message from ${name} (${email}).\nSubject: ${subject}\nMessage:\n${message}`,
@@ -86,14 +83,19 @@ export const handleContactSubmit = async (req, res) => {
           `,
         };
 
-        await transporter.sendMail(mailOptions);
-        console.log(`✉️ Developer alert email sent successfully to: ${mailOptions.to}`);
-        emailSent = true;
+        const { error } = await resend.emails.send(mailOptions);
+        if (error) {
+          console.warn(`⚠️ Failed to send developer alert: ${error.message}`);
+        } else {
+          console.log(`✉️ Developer alert email sent successfully via Resend to: ${myEmail}`);
+        }
 
         // -- EMAIL 2: CLIENT AUTOMATIC CONFIRMATION REPLY --
+        // WARNING: Resend free tier (without a verified custom domain) does NOT allow sending emails 
+        // to arbitrary client addresses. It will fail. You must add a domain in Resend to enable this.
         try {
           const autoReplyOptions = {
-            from: `"Ashique | Portfolio" <${process.env.EMAIL_USER}>`,
+            from: 'Ashique | Portfolio <onboarding@resend.dev>',
             to: email,
             subject: `✨ Message Confirmed: Thank you, ${name}!`,
             text: `Thank you, ${name}!\n\nYour message has been safely received. I appreciate you taking the time to connect, and I will get back to you within 24 hours.\n\nSubject: ${subject}\n\nBest Regards,\nAshique`,
@@ -138,28 +140,21 @@ export const handleContactSubmit = async (req, res) => {
             `,
           };
 
-          await transporter.sendMail(autoReplyOptions);
-          console.log(`✉️ Auto-reply confirmation email sent successfully to client: ${email}`);
+          const clientRes = await resend.emails.send(autoReplyOptions);
+          if (clientRes.error) {
+            console.warn(`⚠️ Failed to send auto-reply to client (requires verified domain): ${clientRes.error.message}`);
+          } else {
+            console.log(`✉️ Auto-reply confirmation email sent successfully to client: ${email}`);
+          }
         } catch (autoReplyErr) {
           console.warn(`⚠️ Failed to send auto-reply to client: ${autoReplyErr.message}`);
         }
       } catch (err) {
         console.warn(`⚠️ Failed to send email alerts: ${err.message}`);
-        emailWarning = `Saved to DB successfully, but email dispatch failed: ${err.message}`;
       }
     } else {
-      console.log('ℹ️ Email credentials not configured or still set to defaults. Skipping email dispatch.');
-      emailWarning = 'Saved to DB successfully. Email alert skipped (SMTP credentials not configured in backend/.env).';
+      console.log('ℹ️ Resend API Key not configured. Skipping email dispatch.');
     }
-
-    // 4. Return response
-    return res.status(201).json({
-      success: true,
-      message: 'Message stored and submitted successfully!',
-      data: savedContact,
-      emailSent,
-      warning: emailWarning,
-    });
   } catch (error) {
     console.error(`❌ Controller Error: ${error.message}`);
     return res.status(500).json({
